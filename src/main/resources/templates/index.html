@@ -1,0 +1,38 @@
+<!-- This page is illustrative and contains ideas about HTML formatting -->
+<!DOCTYPE HTML>
+<!-- Signals to the Layout Dialect which layout should be used to decorate this View -->
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/base}" lang="en">
+
+<head>
+<th:block layout:fragment="head" th:remove="tag">
+    <title>Intro</title>
+</th:block>
+</head>
+
+<body>
+<th:block layout:fragment="body" th:remove="tag">
+    <!-- Start of body content specific to page -->
+    <div class="px-4 py-5 my-5">
+        <h1><strong>Java and Spring</strong></h1>
+        <h3><strong>What should Java Developers learn?</strong></h3>
+        <ol>
+            <li>Java 11-17 is used for PBL. Java 8 appears to be College Board standard.  Java features like Reactive Streams, HTTP2 client, JShell, React JS are more recent than 8.</li>
+            <li>GitHub.  Learning to master managing change, branches, pull requests, and more.</li>
+            <li>Development DevOps. Java programmers should have a passion for managing the environment and learning automation (Git, Maven, Docker).</li>
+            <li>REST and Microservices using Spring.  Mastering creating and consuming RESTful APIs</li>
+        </ol>
+        <h3><strong>What is Spring?</strong></h3>
+        <ol>
+            <li>Spring Framework is the most popular application development framework of Java. </li>
+            <li>Spring Boot helps to create a stand-alone application with less configuration.</li>
+            <li>Spring MVC is a model view controller-based web framework under the Spring framework.</li>
+            <li>ThymeLeaf is a server-side Java template engine, supports HTML5 JVM web development, and provides full integration with Spring Framework.</li>
+        </ol>
+        
+    </div>
+    <!-- End of body content specific to page -->
+</th:block>
+</body>
+
+</html>

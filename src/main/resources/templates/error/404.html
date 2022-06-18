@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/base}" lang="en">
+
+<head>
+<th:block layout:fragment="head" th:remove="tag">
+    <!-- Start of head content specific to page -->
+    <title>404 error</title>
+    <!-- End of head content specific to page -->
+</th:block>
+</head>
+
+<body>
+<th:block layout:fragment="body" th:remove="tag">
+    <div class="px-4 py-5 my-5 text-center">
+        <h3 class="display-5 fw-bold">404 error occurred</h3>
+
+        <div class="jumbotron jumbotron-fluid" style="text-align: center; ">
+            <h4>Engineering is on the case!</h4>
+            <a href="/">Go Home</a>
+        </div>
+    </div>
+</th:block>>
+</body>
+
+</html>
