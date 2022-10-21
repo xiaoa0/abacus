@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class Server {
     
-    // Listens for incoming clients and creates a socketto communicate with them
+    // Listens for incoming clients and creates a socket to communicate with them
     private ServerSocket serverSocket;
 
     // Constructor for serverSocket
@@ -21,11 +21,12 @@ public class Server {
             // Keeps looking for more clients to connect until server ends
             while(!serverSocket.isClosed()) {
 
+                // Instantiates the client
                 Socket socket = serverSocket.accept();
                 System.out.println("A client has connected");
                 ClientHandler clientHandler = new ClientHandler(socket);
-
-                // Creates a new thread to run asynch
+                System.out.println(ClientHandler.clientHandlers);
+                // Creates a new thread to run async
                 Thread thread = new Thread(clientHandler);
                 thread.start();
 

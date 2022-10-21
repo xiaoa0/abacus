@@ -15,6 +15,7 @@ public class Client {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String username;
+    private int score;
 
     public Client(Socket socket, String username) {
         try {
