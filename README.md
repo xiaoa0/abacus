@@ -4,3 +4,6 @@
 - Improve your skills with solo practice mode
 - Learn more about the history of the abacus with informative articles
 - Intuitive keyboard controls
+
+### Contributing Guidelines
+PULL BEFORE YOU PUSH
