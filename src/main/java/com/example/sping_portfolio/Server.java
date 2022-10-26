@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
-import java.util.concurrent.atomic.DoubleAccumulator;
 
 public class Server {
     
@@ -59,6 +58,19 @@ public class Server {
 
     public void sendNewQuestion() {
 
+        // New ClientHandler object named clientHandler
+        // For each clientHandler in arrayList clientHandlers
+        // I dislike you java
+        for (ClientHandler clientHandler : ClientHandler.clientHandlers) {
+            try {
+                // If its any client connected but this one
+                clientHandler.bufferedWriter.write(this.question);
+                clientHandler.bufferedWriter.newLine();
+                clientHandler.bufferedWriter.flush();
+            } catch (IOException e) {
+
+            }
+        }
     }
 
     public void closeServerSocket() {
