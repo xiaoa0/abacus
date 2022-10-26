@@ -16,10 +16,14 @@ public class ClientHandler implements Runnable {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String clientUsername;
+    private int score;
+    private Server server;
+    public int answer;
 
-    public ClientHandler(Socket socket) {
+    public ClientHandler(Socket socket, Server server) {
         try {
             this.socket = socket;
+            this.server = server;
             // socket.getOutputStream() gets a byte stream
             // Wrap it in OutputStreamWriter() to turn it into characters 
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -91,5 +95,13 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setScore(int newScore) {
+        this.score = newScore;
+    }
+
+    public int getScore() {
+        return this.score;
     }
 }
