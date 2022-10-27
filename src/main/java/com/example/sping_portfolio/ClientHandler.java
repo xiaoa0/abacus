@@ -15,7 +15,7 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private BufferedReader bufferedReader;
     BufferedWriter bufferedWriter;
-    private String clientUsername;
+    String clientUsername;
     private int score;
     private Server server;
     public int answer;
@@ -45,6 +45,11 @@ public class ClientHandler implements Runnable {
         while (socket.isConnected()) {
             try {
                 messageFromClient = bufferedReader.readLine();
+                System.out.print(messageFromClient);
+                if (messageFromClient.equals("start game")) {
+                    server.generateNewQuestion();
+                    server.sendNewQuestion();
+                }
                 broadcastMessage(messageFromClient);
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
@@ -97,8 +102,8 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public void setScore(int newScore) {
-        this.score = newScore;
+    public void incrementScore(int newScore) {
+        this.score += newScore;
     }
 
     public int getScore() {

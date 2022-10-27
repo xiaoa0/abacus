@@ -3,7 +3,6 @@ package com.example.sping_portfolio;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Random;
 
 public class Server {
     
@@ -40,27 +39,24 @@ public class Server {
         }
     }
 
-    public boolean testAnswer(ClientHandler client) {
-        return client.answer == answer;
-    }
-
     public void generateNewQuestion() {
-        long newAnswer = (long) Math.floor(Math.random() * 9999999999999L);
 
+        // generates a random answer from 0-1 trillion
+        long newAnswer = (long) Math.floor(Math.random() * 999_999_999_999L);
+
+        // generates two numbers when added equals the random answer
         long addend1 = (long) Math.floor(Math.random() * newAnswer);
         long addend2 = (long) newAnswer - addend1;
 
+        // concatenates addends and answer into a string
         String newQuestion = addend1 + " + " + addend2 + " = " + newAnswer;
 
+        // declares answer and question
         this.answer = newAnswer;
         this.question = newQuestion;
     }
 
     public void sendNewQuestion() {
-
-        // New ClientHandler object named clientHandler
-        // For each clientHandler in arrayList clientHandlers
-        // I dislike you java
         for (ClientHandler clientHandler : ClientHandler.clientHandlers) {
             try {
                 // If its any client connected but this one
@@ -70,6 +66,29 @@ public class Server {
             } catch (IOException e) {
 
             }
+        }
+    }
+
+    public void testAnswer(ClientHandler clientTester) {
+        
+        // if they answer correctly
+        if (clientTester.answer == answer) {
+            
+            // increment client score
+            clientTester.incrementScore(1);
+            
+            // decrement all other scores
+            for (ClientHandler clientHandler : ClientHandler.clientHandlers) {
+                if (clientHandler.clientUsername != clientTester.clientUsername) {
+                    clientHandler.incrementScore(-1);
+                }
+            }
+
+            // generate a new question
+            this.generateNewQuestion();
+
+            // send the new question
+            this.sendNewQuestion();
         }
     }
 
@@ -88,7 +107,9 @@ public class Server {
 
         ServerSocket serverSocket = new ServerSocket(1234);
         Server server = new Server(serverSocket);
-        server.startServer();
 
+
+
+        server.startServer();
     }
 }
