@@ -10,6 +10,7 @@ public class Server {
     private ServerSocket serverSocket;
     private long answer;
     private String question;
+    private int roundNum = 0;
 
     // Constructor for serverSocket
     public Server(ServerSocket serverSocket) {
@@ -27,7 +28,7 @@ public class Server {
                 Socket socket = serverSocket.accept();
                 System.out.println("A client has connected");
                 ClientHandler clientHandler = new ClientHandler(socket, this);
-                System.out.println(ClientHandler.clientHandlers);
+
                 // Creates a new thread to run async
                 Thread thread = new Thread(clientHandler);
                 thread.start();
@@ -38,6 +39,8 @@ public class Server {
 
         }
     }
+
+
 
     public void generateNewQuestion() {
 
@@ -56,41 +59,54 @@ public class Server {
         this.question = newQuestion;
     }
 
-    public void sendNewQuestion() {
-        for (ClientHandler clientHandler : ClientHandler.clientHandlers) {
-            try {
-                // If its any client connected but this one
-                clientHandler.bufferedWriter.write(this.question);
-                clientHandler.bufferedWriter.newLine();
-                clientHandler.bufferedWriter.flush();
-            } catch (IOException e) {
 
-            }
-        }
+
+    public String getQuestion() {
+        return this.question;
     }
+
+
 
     public void testAnswer(ClientHandler clientTester) {
         
         // if they answer correctly
+
+        System.out.println();
+        System.out.println(clientTester.clientUsername + " guessed: " + clientTester.answer);
         if (clientTester.answer == answer) {
-            
-            // increment client score
-            clientTester.incrementScore(1);
-            
-            // decrement all other scores
+
+            // change all scores for objects
+            clientTester.setScore(clientTester.getScore() + 1);
             for (ClientHandler clientHandler : ClientHandler.clientHandlers) {
                 if (clientHandler.clientUsername != clientTester.clientUsername) {
-                    clientHandler.incrementScore(-1);
+                    clientHandler.setScore(clientHandler.getScore() - 1);
                 }
             }
 
-            // generate a new question
-            this.generateNewQuestion();
+            this.newRound();
 
-            // send the new question
-            this.sendNewQuestion();
+        } else {
+            System.out.println("client answered incorrect");
+            clientTester.refreshUI(clientTester);
         }
     }
+
+    public void newRound() {
+
+        this.generateNewQuestion();
+        this.roundNum += 1;
+        System.out.println("\033[H\033[2J");
+        System.out.println("A new round has started: " + this.getQuestion());
+        System.out.println("Answer: " + this.answer);
+        System.out.println("Round: " + this.roundNum);
+        
+        for (ClientHandler clientHandler : ClientHandler.clientHandlers) {
+            System.out.println(clientHandler.clientUsername + " score: " + clientHandler.getScore());
+            clientHandler.refreshUI(clientHandler);
+        }
+    }
+
+
 
     public void closeServerSocket() {
         try {
@@ -103,13 +119,14 @@ public class Server {
 
     }
 
+
+
     public static void main(String[] args) throws IOException{
 
         ServerSocket serverSocket = new ServerSocket(1234);
         Server server = new Server(serverSocket);
 
-
-
+        server.generateNewQuestion();
         server.startServer();
     }
 }

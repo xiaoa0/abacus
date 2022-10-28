@@ -16,9 +16,9 @@ public class ClientHandler implements Runnable {
     private BufferedReader bufferedReader;
     BufferedWriter bufferedWriter;
     String clientUsername;
-    private int score;
+    private int score = 10;
     private Server server;
-    public int answer;
+    public double answer;
 
     public ClientHandler(Socket socket, Server server) {
         try {
@@ -30,27 +30,36 @@ public class ClientHandler implements Runnable {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.clientUsername = bufferedReader.readLine();
             clientHandlers.add(this);
-            broadcastMessage("SERVER: " + clientUsername + " has entered the chat!");
+            System.out.println("SERVER: " + clientUsername + " has entered the chat!");
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
     }
+
+
 
     // This is a seperate thread to listen to messages
     @Override
     public void run() {
         String messageFromClient;
 
+        this.refreshUI(this);
+
         // Listens for user input while the socket is connected
         while (socket.isConnected()) {
             try {
+
                 messageFromClient = bufferedReader.readLine();
-                System.out.print(messageFromClient);
-                if (messageFromClient.equals("start game")) {
-                    server.generateNewQuestion();
-                    server.sendNewQuestion();
+
+                try {
+                    this.answer = Double.parseDouble(messageFromClient);
+                    server.testAnswer(this);
+
+                } catch (NumberFormatException e) {
+
                 }
-                broadcastMessage(messageFromClient);
+
+                
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
                 break;
@@ -58,29 +67,33 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public void broadcastMessage(String messageToSend) {
 
-        // New ClientHandler object named clientHandler
-        // For each clientHandler in arrayList clientHandlers
-        // I dislike you java
-        for (ClientHandler clientHandler : clientHandlers) {
-            try {
-                // If its any client connected but this one
-                if (!clientHandler.clientUsername.equals(clientUsername)) {
-                    clientHandler.bufferedWriter.write(messageToSend);
-                    clientHandler.bufferedWriter.newLine();
-                    clientHandler.bufferedWriter.flush();
-                }
-            } catch (IOException e) {
-                closeEverything(socket, bufferedReader, bufferedWriter);
-            }
+
+    public void sendMessage(String messageToSend, ClientHandler clientHandler) {
+
+        try {
+            clientHandler.bufferedWriter.write(messageToSend);
+            clientHandler.bufferedWriter.newLine();
+            clientHandler.bufferedWriter.flush();
+        } catch (IOException e) {
+            closeEverything(socket, bufferedReader, bufferedWriter);
         }
+
+    }
+
+    public void refreshUI(ClientHandler clientHandler) {
+        clientHandler.sendMessage("\033[H\033[2J", clientHandler);
+        String scoreString = clientHandler.clientUsername + " score: " + clientHandler.score;
+        clientHandler.sendMessage(scoreString, clientHandler);
+        clientHandler.sendMessage(clientHandler.server.getQuestion(), clientHandler);
     }
 
     public void removeClientHandler() {
         clientHandlers.remove(this);
-        broadcastMessage("SERVER: " + clientUsername + "has disconnected");
+        System.out.println("SERVER: " + clientUsername + "has disconnected");
     }
+
+
 
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
         removeClientHandler();
@@ -102,8 +115,8 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public void incrementScore(int newScore) {
-        this.score += newScore;
+    public void setScore(int newScore) {
+        this.score = newScore;
     }
 
     public int getScore() {
