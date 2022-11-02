@@ -25,10 +25,11 @@
     
     function abacus(e) {
       value = e.key;
+      //press "f" to toggle between selection mode and beads push mode
       if (value == "f") {
         selecting = !selecting;
       } else {
-        // if not in selection mode
+        // if in beads push mode (i.e. NOT selection mode)
         if (selecting == false) {
           // get # value of the selected column
           temp = document.getElementById(column).getAttribute("src");
