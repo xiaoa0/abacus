@@ -1,38 +1,116 @@
-<!-- This page is illustrative and contains ideas about HTML formatting -->
-<!DOCTYPE HTML>
-<!-- Signals to the Layout Dialect which layout should be used to decorate this View -->
-<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{layouts/base}" lang="en">
-
+<!DOCTYPE html>
+<html>
 <head>
-<th:block layout:fragment="head" th:remove="tag">
-    <title>Intro</title>
-</th:block>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>abacus.io</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <style>
+    img {
+      margin-top: 5px;
+    }
+    #L {
+      margin-left: 5px;
+    }
+  </style>
+  <script type="text/javascript" async>
+    document.addEventListener('keydown', abacus);
+    
+    // initial/global variables
+    var selecting = false;
+    var column = "column1";
+    var row = "b"
+    const prefix = "/main/resources/static/images/";
+    var temp;
+    
+    function abacus(e) {
+      value = e.key;
+      //press "f" to toggle between selection mode and beads push mode
+      if (value == "f") {
+        selecting = !selecting;
+      } else {
+        // if in beads push mode (i.e. NOT selection mode)
+        if (selecting == false) {
+          // get # value of the selected column
+          temp = document.getElementById(column).getAttribute("src");
+          temp = temp.replace("/main/resources/static/images/", "");
+          temp = temp.replace(".png", "");
+          temp = parseInt(temp);
+          // calculate new # value according to user input
+          switch (value) {
+            case ArrowUp:
+              if (row == "b") {
+                if (temp!=4 && temp!=9) {
+                temp++;
+                }
+              } else if (row == "a") {
+                if (temp >= 5) {
+                  temp -= 5;
+                }
+              }
+            break;
+            case ArrowDown:
+              if (row == "b") {
+                if (temp!=0 && temp!=5) {
+                temp--;
+                }
+              } else if (row == "a") {
+                if (temp < 5) {
+                  temp += 5;
+                }
+              }
+            break;
+          }
+          // change column to new # value
+          temp = temp.toString();
+          temp = prefix.concat(temp);
+          temp = temp.concat(".png");
+          document.getElementById(column).src = temp;
+        // if in selection mode
+        } else if (selecting == true) {
+          switch (value) {
+            // if "up" pressed, move selection to top row if not on bottom row
+            case ArrowUp:
+              if (row == "b") {
+                row = "a";
+              }
+            break;
+            // if "down" pressed, move selection to bottom row if not on top row
+            case ArrowDown:
+              if (row == "a") {
+                row = "b";
+              }
+            break;
+            // if "left" pressed, move selection 1 column to the left if not on leftmost column
+            case ArrowLeft:
+              if (column != "column13") {
+                temp = column.replace("column", "");
+                column = column.replace(temp, "")
+                temp = parseInt(temp);
+                temp++;
+                temp = temp.toString();
+                column = column.concat(temp);
+              }
+            break;
+            // if "right" pressed, move selection 1 column to the right if not on rightmost column
+            case ArrowRight:
+              if (column != "column1") {
+                temp = column.replace("column", "");
+                column = column.replace(temp, "")
+                temp = parseInt(temp);
+                temp--;
+                temp = temp.toString();
+                column = column.concat(temp);
+              }
+            break;
+          }
+        }
+      }
+    }
+  </script>
 </head>
 
 <body>
-<th:block layout:fragment="body" th:remove="tag">
-    <!-- Start of body content specific to page -->
-    <div class="px-4 py-5 my-5">
-        <h1><strong>Java and Spring</strong></h1>
-        <h3><strong>What should Java Developers learn?</strong></h3>
-        <ol>
-            <li>Java 11-17 is used for PBL. Java 8 appears to be College Board standard.  Java features like Reactive Streams, HTTP2 client, JShell, React JS are more recent than 8.</li>
-            <li>GitHub.  Learning to master managing change, branches, pull requests, and more.</li>
-            <li>Development DevOps. Java programmers should have a passion for managing the environment and learning automation (Git, Maven, Docker).</li>
-            <li>REST and Microservices using Spring.  Mastering creating and consuming RESTful APIs</li>
-        </ol>
-        <h3><strong>What is Spring?</strong></h3>
-        <ol>
-            <li>Spring Framework is the most popular application development framework of Java. </li>
-            <li>Spring Boot helps to create a stand-alone application with less configuration.</li>
-            <li>Spring MVC is a model view controller-based web framework under the Spring framework.</li>
-            <li>ThymeLeaf is a server-side Java template engine, supports HTML5 JVM web development, and provides full integration with Spring Framework.</li>
-        </ol>
-        
-    </div>
-    <!-- End of body content specific to page -->
-</th:block>
+  <img src="/main/resources/static/images/L.png" height="200px" class="abacus" id="L"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column13"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column12"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column11"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column10"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column9"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column8"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column7"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column6"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column5"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column4"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column3"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column2"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column1"><img src="/main/resources/static/images/R.png" height="200px" class="abacus"><br>
 </body>
-
 </html>

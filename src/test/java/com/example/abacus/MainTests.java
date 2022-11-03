@@ -1,4 +1,4 @@
-package com.example.sping_portfolio;
+package com.example.abacus;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
