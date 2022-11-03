@@ -1,116 +1,98 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
   <title>abacus.io</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   <style>
-    img {
+    body {
+      font-family: "Lucida Console", monospace;
+      background-image: url("images/background.png");
+    }
+    table {
+      margin: auto;
+    }
+    th {
+      border: 0px solid black;
+      text-align: left;
+      padding: 5px;
+    }
+    td {
+      border: 0px solid black;
+      padding: 5px;
+    }
+    .navIC {
+      margin-right: 3px;
+    }
+    .navLink {color: white;} .navLink:hover {color: white;}
+    .trNav:hover {background-color: #555f2e;}
+    .abacus {
       margin-top: 5px;
     }
-    #L {
-      margin-left: 5px;
-    }
   </style>
+  
   <script type="text/javascript" async>
-    document.addEventListener('keydown', abacus);
-    
-    // initial/global variables
-    var selecting = false;
-    var column = "column1";
-    var row = "b"
-    const prefix = "/main/resources/static/images/";
-    var temp;
-    
-    function abacus(e) {
-      value = e.key;
-      //press "f" to toggle between selection mode and beads push mode
-      if (value == "f") {
-        selecting = !selecting;
+    var fileDefault = function(id) {
+      repID = id.concat("F");
+      document.getElementById(repID).src = "/images/fileIcon.png";
+    }
+    var folderDefault = function(id) {
+      repID = id.concat("F");
+      document.getElementById(repID).src = "/images/folderIcon.png";
+    }
+    var navHovers = function(id) {
+      repID = id.concat("F");
+      repImage = document.getElementById(repID).src;
+      repImage = repImage.replace(".png", "_hover.png");
+      document.getElementById(repID).src = repImage;
+    }
+    var incrementAbacus = function(id) {
+      value = document.getElementById(id).getAttribute("src");
+      const prefix = "/images/";
+      value = value.replace("/images/", "");
+      value = value.replace(".png", "");
+      value = parseInt(value);
+      if (value == 9) {
+        document.getElementById(id).src = "/images/0.png";
       } else {
-        // if in beads push mode (i.e. NOT selection mode)
-        if (selecting == false) {
-          // get # value of the selected column
-          temp = document.getElementById(column).getAttribute("src");
-          temp = temp.replace("/main/resources/static/images/", "");
-          temp = temp.replace(".png", "");
-          temp = parseInt(temp);
-          // calculate new # value according to user input
-          switch (value) {
-            case ArrowUp:
-              if (row == "b") {
-                if (temp!=4 && temp!=9) {
-                temp++;
-                }
-              } else if (row == "a") {
-                if (temp >= 5) {
-                  temp -= 5;
-                }
-              }
-            break;
-            case ArrowDown:
-              if (row == "b") {
-                if (temp!=0 && temp!=5) {
-                temp--;
-                }
-              } else if (row == "a") {
-                if (temp < 5) {
-                  temp += 5;
-                }
-              }
-            break;
-          }
-          // change column to new # value
-          temp = temp.toString();
-          temp = prefix.concat(temp);
-          temp = temp.concat(".png");
-          document.getElementById(column).src = temp;
-        // if in selection mode
-        } else if (selecting == true) {
-          switch (value) {
-            // if "up" pressed, move selection to top row if not on bottom row
-            case ArrowUp:
-              if (row == "b") {
-                row = "a";
-              }
-            break;
-            // if "down" pressed, move selection to bottom row if not on top row
-            case ArrowDown:
-              if (row == "a") {
-                row = "b";
-              }
-            break;
-            // if "left" pressed, move selection 1 column to the left if not on leftmost column
-            case ArrowLeft:
-              if (column != "column13") {
-                temp = column.replace("column", "");
-                column = column.replace(temp, "")
-                temp = parseInt(temp);
-                temp++;
-                temp = temp.toString();
-                column = column.concat(temp);
-              }
-            break;
-            // if "right" pressed, move selection 1 column to the right if not on rightmost column
-            case ArrowRight:
-              if (column != "column1") {
-                temp = column.replace("column", "");
-                column = column.replace(temp, "")
-                temp = parseInt(temp);
-                temp--;
-                temp = temp.toString();
-                column = column.concat(temp);
-              }
-            break;
-          }
-        }
+        value++;
+        value = value.toString();
+        value = value.concat(".png");
+        document.getElementById(id).src = prefix.concat(value);
       }
     }
   </script>
 </head>
-
+  
 <body>
-  <img src="/main/resources/static/images/L.png" height="200px" class="abacus" id="L"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column13"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column12"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column11"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column10"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column9"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column8"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column7"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column6"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column5"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column4"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column3"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column2"><img src="/main/resources/static/images/0.png" height="200px" class="abacus" id="column1"><img src="/main/resources/static/images/R.png" height="200px" class="abacus"><br>
+ <table style="width:50%;height:100vh;">
+  <tr height="9%">
+    <th colspan="2"><img src="images/title.png" width="300px" style="margin-top:5px;"></th>
+  </tr>
+  <tr height="1%">
+    <td style="color:white;background-color:#545e2d;"><b>Navigation</b></td>
+    <td style="color:white;background-color:#293016;">Fileview</td>
+  </tr>
+  <tr style="vertical-align:text-top;">
+    <td width="20%" style="background-color:#616e32;">
+      <!-- NAVTABLE -->
+      <table style="width:100%;color:white;">
+        <tr class="trNav"><td><img src="images/fileIcon.png" class="navIC" id="landingF" width="20px"><a href="/" class="navLink" id="landing" onmouseover="navHovers(id)" onmouseout="fileDefault(id)"><u>L</u>anding</a></td></tr>
+    <tr class="trNav"><td><img src="images/fileIcon.png" class="navIC" id="aboutF" width="20px"><a href="about-us" class="navLink" id="about" onmouseover="navHovers(id)" onmouseout="fileDefault(id)"><u>A</u>bout us</a></td></tr>
+    <tr class="trNav"><td><img src="images/folderIcon.png" class="navIC" width="26.4px">Information</td></tr>
+    <tr class="trNav"><td>&emsp;⤷<img src="images/fileIcon.png" class="navIC" id="historyF" width="20px"><a href="drawings" class="navLink" id="history" onmouseover="navHovers(id)" onmouseout="fileDefault(id)"><u>H</u>istory</a></td></tr>
+    <tr class="trNav"><td>&emsp;⤷<img src="images/fileIcon.png" class="navIC" id="guideF" width="20px"><a href="gadgets" class="navLink" id="guide" onmouseover="navHovers(id)" onmouseout="fileDefault(id)"><u>G</u>uide</a></td></tr>
+      </table>
+      <!-- END NAVTABLE -->
+    </td>
+    <td style="color:white;background-color:#464927;vertical-align:top;">Welcome <i>!</i><br><img src="/images/L.png" height="200px" class="abacus" id="L"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column13"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column12"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column11"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column10"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column9"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column8"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column7"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column6"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column5"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column4"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column3"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column2"><img src="/images/0.png" height="200px" class="abacus" onmousedown="incrementAbacus(id)" id="column1"><img src="/images/R.png" height="200px" class="abacus"><br>Select an option on the left to begin.</td>
+  </tr>
+  <tr>
+    <td colspan="2" height="5%" style="text-align:center;vertical-align:bottom;">Studio A.S.A.M. © 2022-2022</td>
+  </tr>
+</table>
+  
 </body>
 </html>
