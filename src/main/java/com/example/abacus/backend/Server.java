@@ -1,20 +1,23 @@
-package com.example.abacus;
+package com.example.abacus.backend;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.UUID;
 
 public class Server {
     
     // Listens for incoming clients and creates a socket to communicate with them
+    private String id;
     private ServerSocket serverSocket;
     private long answer;
     private String question;
     private int roundNum = 0;
 
     // Constructor for serverSocket
-    public Server(ServerSocket serverSocket) {
+    public Server(ServerSocket serverSocket, String id) {
         this.serverSocket = serverSocket;
+        this.id = id;
     }
 
     public void startServer() {
@@ -119,12 +122,16 @@ public class Server {
 
     }
 
+    public String getId() {
+        return this.id;
+    }
+
 
 
     public static void main(String[] args) throws IOException{
 
         ServerSocket serverSocket = new ServerSocket(1234);
-        Server server = new Server(serverSocket);
+        Server server = new Server(serverSocket, UUID.randomUUID().toString());
 
         server.generateNewQuestion();
         server.startServer();
